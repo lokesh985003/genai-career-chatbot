@@ -1,51 +1,48 @@
-# 💼 Smart IT Career Assistant (Gemini API Powered)
-
-A production-ready AI-powered Career Guidance Chatbot built using **Google Gemini API** and **Streamlit**.
-
-This application provides structured, professional IT career guidance including roadmaps, skills, certifications, salary insights, and project suggestions.
+# 💼 Smart IT Career Assistant
+A Production-Ready AI Career Guidance Chatbot using Google Gemini API and Streamlit
 
 ---
 
 ## 🚀 Project Overview
 
-Smart IT Career Assistant is a domain-specific Generative AI chatbot designed to simulate a real-world production architecture.
+Smart IT Career Assistant is a domain-specific AI chatbot designed to provide structured and professional IT career guidance.
 
-It includes:
+The application integrates Google Gemini API with a clean modular architecture and supports multi-turn contextual conversations using Streamlit session state.
 
-- Secure Gemini API integration
-- Structured prompt engineering
-- Multi-turn conversation memory
-- Sliding window context trimming
-- Token-aware response handling
-- Error handling with logging
-- Modular clean architecture
-- Professional Streamlit UI
+It delivers detailed, structured responses including:
 
----
-
-## 🧠 Problem Statement
-
-Build a production-grade domain-specific GenAI chatbot that:
-
-- Integrates Google Gemini API
-- Uses environment-based API key management
-- Implements structured system prompts
-- Supports contextual multi-turn conversations
-- Follows clean backend architecture
-- Handles API errors and edge cases
-- Provides structured professional responses
+- Career Overview
+- Required Skills
+- Learning Roadmap
+- Suggested Projects
+- Certifications
+- Career Path
+- Salary Insights
+- Final Advice
 
 ---
 
-## 🏗️ Project Architecture
+## 🧠 Objective
 
-The system follows clean modular architecture:
+To build a production-style Generative AI chatbot that:
+
+- Securely integrates Google Gemini API
+- Uses environment-based configuration (.env)
+- Implements structured prompt engineering
+- Supports multi-turn chat memory
+- Controls token overflow using sliding window trimming
+- Includes robust error handling
+- Logs system errors for debugging
+
+---
+
+## 🏗️ System Architecture
 
 User  
-→ Streamlit UI  
-→ Memory Manager  
-→ Gemini Service  
-→ System Prompt  
+→ Streamlit UI (`app.py`)  
+→ Session Memory Manager (`session_memory.py`)  
+→ Gemini Service Layer (`gemini_service.py`)  
+→ Structured System Prompt (`system_prompt.py`)  
 → Google Gemini API  
 → Response Rendering  
 
@@ -78,36 +75,78 @@ genai-career-chatbot/
 
 ---
 
-## 📌 Module Responsibilities
+## 📌 Implementation Details
 
-### app.py
-- Streamlit UI rendering
-- Chat interface
-- Sidebar configuration
-- Conversation display
+### 1️⃣ Streamlit UI (app.py)
 
-### services/gemini_service.py
-- Gemini API configuration
-- Chat session handling
-- Sliding window context trimming
-- Error handling (quota, invalid key, model issues)
+- Wide layout configuration
+- Sidebar with supported topics
+- Chat-style message display
+- Clear chat functionality
+- Real-time spinner during response generation
+- Session-based memory initialization
 
-### prompts/system_prompt.py
-- Structured system instruction
-- Professional response formatting rules
+---
 
-### memory/session_memory.py
-- Multi-turn conversation memory
-- Session-based state management
-- Automatic history trimming
+### 2️⃣ Gemini Service Layer (services/gemini_service.py)
 
-### config/settings.py
-- Environment variable loading
-- Secure API key configuration
+- Configures API using environment variable
+- Initializes `GenerativeModel`
+- Uses structured system instruction
+- Sliding window context trimming (`MAX_CONTEXT_MESSAGES = 4`)
+- Converts Streamlit chat format to Gemini format
+- Handles structured API errors:
+  - Quota exceeded (429)
+  - Invalid API key
+  - Model not found
+  - Role formatting errors
+- Logs all runtime errors
 
-### utils/logger.py
-- API logging
-- Error tracking
+---
+
+### 3️⃣ Prompt Engineering (prompts/system_prompt.py)
+
+Defines strict professional response structure:
+
+1. Overview  
+2. Required Skills  
+3. Learning Roadmap  
+4. Projects  
+5. Certifications  
+6. Career Path  
+7. Salary Insights  
+8. Final Advice  
+
+Ensures consistent, detailed, and structured responses.
+
+---
+
+### 4️⃣ Conversation Memory (memory/session_memory.py)
+
+- Uses Streamlit session state
+- Maintains multi-turn chat history
+- Limits stored messages (`MAX_HISTORY = 10`)
+- Automatically trims older messages
+- Prevents token overflow
+
+---
+
+### 5️⃣ Configuration (config/settings.py)
+
+- Loads environment variables using python-dotenv
+- Reads:
+  - `GEMINI_API_KEY`
+  - `MODEL_NAME`
+- Default model: `gemini-2.5-flash`
+
+---
+
+### 6️⃣ Logging (utils/logger.py)
+
+- Creates `logs/` folder automatically
+- Writes logs to `logs/app.log`
+- Logs all Gemini API errors
+- Helps debugging and monitoring
 
 ---
 
@@ -121,41 +160,28 @@ genai-career-chatbot/
 
 ---
 
-## 🧩 Key Features
+## ✨ Key Features
 
 ✔ Structured professional career guidance  
 ✔ Multi-turn contextual conversation  
-✔ Sliding window memory control  
-✔ Token overflow prevention  
-✔ Environment-based API configuration  
-✔ Robust error handling  
+✔ Sliding window memory trimming  
+✔ Token overflow protection  
+✔ Environment-based configuration  
+✔ Defensive error handling  
+✔ Runtime logging  
 ✔ Clean modular architecture  
-✔ Production-ready design  
 
 ---
 
-## 📊 Response Structure
-
-The assistant provides structured answers in the following format:
-
-1. Overview  
-2. Required Skills  
-3. Learning Roadmap  
-4. Projects  
-5. Certifications  
-6. Career Path  
-7. Salary Insights  
-8. Final Advice  
-
----
-
-## ▶️ How to Run the Project
+## ▶️ How to Run the Application
 
 ### Step 1: Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
+
+---
 
 ### Step 2: Create `.env` File
 
@@ -165,6 +191,8 @@ Create a `.env` file in the root directory:
 GEMINI_API_KEY=your_api_key_here
 MODEL_NAME=gemini-2.5-flash
 ```
+
+---
 
 ### Step 3: Run the Application
 
@@ -180,54 +208,30 @@ http://localhost:8501
 
 ---
 
-## ⚠️ Error Handling Implemented
+## 🎯 Production Practices Demonstrated
 
-The system handles:
-
-- API quota exceeded (429)
-- Invalid API key
-- Invalid role formatting
-- Model not found
-- Generic API errors
-
----
-
-## 🎯 Production-Grade Practices Used
-
-- Environment variable configuration
+- Environment-based API management
 - Modular folder structure
-- Context trimming for token control
-- Structured prompt engineering
+- Structured system prompt design
+- Sliding window context control
+- Multi-turn session management
+- Centralized error logging
 - Clean separation of concerns
-- Professional UI rendering
-- Defensive programming
-
----
-
-## 📈 Use Cases
-
-This project is suitable for:
-
-- AI / ML Internship Submissions
-- Generative AI Portfolio Projects
-- Backend Architecture Demonstration
-- Streamlit Production App Example
-- Gemini API Integration Showcase
 
 ---
 
 ## 📌 Conclusion
 
-Smart IT Career Assistant demonstrates the development of a structured, production-style Generative AI application using Google Gemini API.
+Smart IT Career Assistant demonstrates a structured, production-oriented LLM integration using Google Gemini API.
 
-It reflects strong understanding of:
+The project highlights understanding of:
 
 - LLM integration
 - Prompt engineering
 - Context management
-- Clean architecture
-- Production-level error handling
-
+- Streamlit-based UI design
+- Error handling & logging
+- Clean backend architecture
 ---
 
-⭐ If you found this project useful, feel free to star the repository.
+⭐ If you found this project useful, consider giving it a star.
